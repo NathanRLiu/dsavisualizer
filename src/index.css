@@ -1,5 +1,5 @@
 :root {
-	--backgroundColor: #111111;
+	--backgroundColor: #ffffff;
 	--innerHexColor: #949398FF;
 	--outerHexColor: #F4DF4EFF;
 }
@@ -64,8 +64,11 @@ body {
 	border-top: 30px solid var(--innerHexColor);
 }
 .connection {
-	box-shadow:-5px -5px -5px #888;
 	position:absolute;
+	--hanColor: rgba(0,0,0,.7);
+	filter: drop-shadow(3px 3px 2px var(--hanColor))
+	drop-shadow(3px 3px 5px rgba(0,0,0,.7))
+	drop-shadow(3px 3px 4px rgba(0,0,0,.7));
 }
 
 code {

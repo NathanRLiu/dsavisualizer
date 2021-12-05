@@ -19,7 +19,7 @@ var nodeList = []
 var page = []
 nodeList.push(<HexNode text="1"/>)
 function connectNodes(){
-	return(<svg class="connection" width="500" height="500"><line x1="50" y1="50" x2="350" y2="350" stroke="white"/></svg>)
+	return(<svg class="connection" width="500" height="500"><line x1="50" y1="50" x2="350" y2="350" stroke="black"/></svg>)
 }
 page.push(connectNodes());
 
