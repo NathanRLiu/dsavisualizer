@@ -3,6 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+class Node{
+	constructor(val){
+		this.value = val;
+	}
+	addNode(newNode){
+		if (!this.children){
+			this.children = [];
+		}
+		this.children.push(newNode);
+	}
+	getChildren(){
+		return(this.children);
+	}
+}
 class HexNode extends React.Component {
 	constructor(){
 		super();
@@ -29,7 +43,7 @@ var nodeList = []
 
 var page = []
 var myNode = <HexNode text="1"/>
-var myNode2 = <HexNode text="2" x={300} y={600}/>
+var myNode2 = <HexNode text="2" x={300} y={519.61}/>//multiply delta x by tan(60) to get y
 var myComponent1 = ReactDOM.render(myNode,document.getElementById('root'))
 page.push(myNode);
 nodeList.push(myComponent1.BoundingClientRect())
@@ -50,8 +64,12 @@ function connectNodes(node1,node2){
 		<line x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor"/>
 	</svg>)
 }
+
+let tree = new Node(1)
+let newNode = new Node(5);
+tree.addNode(newNode);
+console.log(tree.getChildren());
 page.push(connectNodes(nodeList[0],nodeList[1]));
-console.log(nodeList)
 ReactDOM.render(
 	page,
 	document.getElementById('root')

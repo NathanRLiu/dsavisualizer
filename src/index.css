@@ -1,7 +1,9 @@
 :root {
+	--lineColor: 50,200,50;
+	--hanColor: rgba(var(--lineColor),0.7);
 	--backgroundColor: #010101;
 	--innerHexColor: #949398FF;
-	--outerHexColor: #F4DF4EFF;
+	--outerHexColor: rgb(var(--lineColor));
 }
 body {
 	margin: 0;
@@ -46,6 +48,8 @@ body {
 .outerHex{
   background-color: var(--outerHexColor);
 	z-index:0;
+	filter: drop-shadow(0px 0px 2px var(--hanColor))
+	drop-shadow(0px 0px 3px var(--hanColor));
 }
 .outerHex:after {
 	border-top: 30px solid var(--outerHexColor);
@@ -65,8 +69,6 @@ body {
 }
 .connection {
 	position:absolute;
-	--lineColor: 250,200,50;
-	--hanColor: rgba(var(--lineColor),0.7);
 	color: rgb(var(--lineColor));
 	z-index:-1;
 	filter: drop-shadow(0px 0px 2px var(--hanColor))
