@@ -3,26 +3,23 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+let viewFrame = "75%";
+let xOffset = 0;
 class Node{
 	constructor(val){
 		this.value = val;
+		this.children = [];
 	}
 	addNode(newNode){
-		if (!this.children){
-			this.children = [];
-		}
 		this.children.push(newNode);
-	}
-	getChildren(){
-		return(this.children);
 	}
 }
 class HexNode extends React.Component {
 	constructor(){
 		super();
-		this.BoundingClientRect = this.sexBoundingClientRect.bind(this);
+		this.BoundingClientRect = this.getBoundingClientRect.bind(this);
 	}
-	sexBoundingClientRect(){
+	getBoundingClientRect(){
 		console.log(ReactDOM.findDOMNode(this))
 		return ReactDOM.findDOMNode(this).getBoundingClientRect();
 	}
@@ -61,15 +58,33 @@ function connectNodes(node1,node2){
 	y2/=2;
 	return(
 	<svg class="connection" width="400" height="700">
-		<line x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor"/>
+		<line x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="5"  stroke="currentColor"/>
 	</svg>)
 }
-
-let tree = new Node(1)
+let widthList = [];
+let root = new Node(1);
 let newNode = new Node(5);
-tree.addNode(newNode);
-console.log(tree.getChildren());
+root.addNode(newNode);
+console.log(root.children);
 page.push(connectNodes(nodeList[0],nodeList[1]));
+function traverse(node, iterations){
+	const nodeChildren = node.children;
+	if (!widthList[iterations]){
+		widthList.push(0);
+	}
+	widthList[iterations] += 1;
+	for (let i = 0; i < nodeChildren.length; i++){
+		traverse(nodeChildren[i], iterations + 1);
+	}
+}
+traverse(root, 0);
+let maxWidth = 0;
+for (let i = 0; i < widthList.length; i++){
+	if (widthList[i] > maxWidth){
+		maxWidth = widthList[i];
+	}
+}
+xOffset = viewFrame/maxWidth;
 ReactDOM.render(
 	page,
 	document.getElementById('root')
