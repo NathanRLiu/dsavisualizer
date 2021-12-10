@@ -82,9 +82,10 @@ function plot(node, currGen, currX, currY, multiplier){
 	const myNode = <HexNode text = {node.value} x = {currX} y = {currY}> </HexNode>
 	page.push(myNode)
 	let renderedNode = ReactDOM.render(myNode,document.getElementById('root'));
+	let connXOffset = 52;
+	let connYOffset = 30;
 	for (let i = 0; i < node.children.length; i++){
 		if (node.children.length != 1){
-
 			const isLeft = (i%2===0)
 			var multiplier = 0;
 			if (isLeft){
@@ -95,7 +96,7 @@ function plot(node, currGen, currX, currY, multiplier){
 			}
 
 			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier)
-			page.push(connectNodes(currX+52, currX + 52 + xOffset * multiplier, currY + 52, currY+getYOffsetFromXOffset(xOffset), widthList.length))
+			page.push(connectNodes(currX+52, currX + 52 + xOffset * multiplier, currY + connYOffset, connYOffset+currY+getYOffsetFromXOffset(xOffset), widthList.length))
 		}else{
 			const isLeft = Math.random() < 0.5
 			var multiplier = 0;
@@ -107,7 +108,7 @@ function plot(node, currGen, currX, currY, multiplier){
 			}
 			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier);
 
-			page.push(connectNodes(currX+52, currX + 52 + multiplier * xOffset, currY + 52, currY+getYOffsetFromXOffset(xOffset), widthList.length));
+			page.push(connectNodes(currX+connXOffset, currX + connXOffset + multiplier * xOffset, currY + connYOffset, connYOffset+currY+getYOffsetFromXOffset(xOffset), widthList.length));
 		}
 	}
 	return renderedNode;
