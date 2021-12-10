@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import HexNode from './HexNode.js'
 
-let viewFrame = "75%";
+let viewFrame = 75;
+let VFUnits = "%";
 let xOffset = 0;
 class Node{
 	constructor(val){
@@ -14,59 +16,51 @@ class Node{
 		this.children.push(newNode);
 	}
 }
-class HexNode extends React.Component {
-	constructor(){
-		super();
-		this.BoundingClientRect = this.getBoundingClientRect.bind(this);
-	}
-	getBoundingClientRect(){
-		console.log(ReactDOM.findDOMNode(this))
-		return ReactDOM.findDOMNode(this).getBoundingClientRect();
-	}
-	render(){
-		return (
-			<div className="hex outerHex" style = {
-				{marginTop:this.props.y,
-				 marginLeft:this.props.x}
-			}>
-				<div className="hex innerHex">
-					<p className="nodeText">{this.props.text}</p>
-				</div>
-			</div>
-		)
-	}
-}
-var nodeList = []
 
-var page = []
-var myNode = <HexNode text="1"/>
-var myNode2 = <HexNode text="2" x={300} y={519.61}/>//multiply delta x by tan(60) to get y
-var myComponent1 = ReactDOM.render(myNode,document.getElementById('root'))
-page.push(myNode);
-nodeList.push(myComponent1.BoundingClientRect())
-var myComponent = ReactDOM.render(myNode2,document.getElementById('root'))
-page.push(myNode2);
-nodeList.push(myComponent.BoundingClientRect())
+function getYOffsetFromXOffset(xOffset){
+	return xOffset * Math.tan(Math.PI / 3);
+}
+
+var nodeList = [];
+
+var page = [];
+
 function connectNodes(node1,node2){
 	let x1 = node1.left + node1.right;
 	x1/=2;
 	let x2 = node2.left + node2.right;
-	x2/=2
+	x2/=2;
 	let y1 = node1.top + node1.bottom;
 	y1/=2;
 	let y2 = node2.top + node2.bottom;
 	y2/=2;
+	console.log(node1.left)
+	console.log(x1)
 	return(
-	<svg class="connection" width="400" height="700">
+	<svg class="connection" width={Math.abs(x2-x1) + "px"} height={Math.abs(y2-y1)+ "px"}>
 		<line x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="5"  stroke="currentColor"/>
 	</svg>)
 }
+function createNode(counter)
+{
+	let hasLeft = Math.random() < 0.5;
+	let hasRight = Math.random() < 0.5
+	if (counter >= 14){
+		hasLeft = false
+		hasRight = false
+	}
+	let thisNode = new Node(parseInt((Math.random() * 80),10))
+	if (hasLeft){
+		thisNode.addNode(createNode(counter + 1));
+	}
+	if (hasRight){
+		thisNode.addNode(createNode(counter + 1));
+	}
+	return thisNode
+}
 let widthList = [];
-let root = new Node(1);
-let newNode = new Node(5);
-root.addNode(newNode);
+let root = createNode(0);
 console.log(root.children);
-page.push(connectNodes(nodeList[0],nodeList[1]));
 function traverse(node, iterations){
 	const nodeChildren = node.children;
 	if (!widthList[iterations]){
@@ -77,14 +71,24 @@ function traverse(node, iterations){
 		traverse(nodeChildren[i], iterations + 1);
 	}
 }
-traverse(root, 0);
+function plot(node, currGen, currX, currY, isLeft){
+	const myNode = <HexNode text = {node.value} x = {currX + (!isLeft * xOffset) + "px"} y = {currY * getYOffsetFromXOffset(currX)+"px"}> </HexNode>
+	page.push(myNode)
+	let renderedNode = ReactDOM.render(myNode,document.getElementById('root'));
+	for (let i = 0; i < node.children.length; i++){
+			page.push(connectNodes(renderedNode, plot(node.children[i], currGen + 1, currX+xOffset, currY+getYOffsetFromXOffset(currX), (i%2==0))))
+	}
+	return renderedNode;
+}
 let maxWidth = 0;
+
 for (let i = 0; i < widthList.length; i++){
 	if (widthList[i] > maxWidth){
 		maxWidth = widthList[i];
 	}
 }
-xOffset = viewFrame/maxWidth;
+
+plot(root, 0, false);
 ReactDOM.render(
 	page,
 	document.getElementById('root')
