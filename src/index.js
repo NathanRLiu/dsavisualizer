@@ -6,7 +6,7 @@ import HexNode from './HexNode.js'
 
 let viewFrame = 75;
 let VFUnits = "%";
-let xOffset = 0;
+let xOffset = 200;
 class Node{
 	constructor(val){
 		this.value = val;
@@ -34,10 +34,10 @@ function connectNodes(node1,node2){
 	y1/=2;
 	let y2 = node2.top + node2.bottom;
 	y2/=2;
-	console.log(node1.left)
-	console.log(x1)
+	console.log(x2);
+	console.log(x1);
 	return(
-	<svg class="connection" width={Math.abs(x2-x1) + "px"} height={Math.abs(y2-y1)+ "px"}>
+	<svg class="connection" width={400} height={700}>
 		<line x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="5"  stroke="currentColor"/>
 	</svg>)
 }
@@ -60,7 +60,6 @@ function createNode(counter)
 }
 let widthList = [];
 let root = createNode(0);
-console.log(root.children);
 function traverse(node, iterations){
 	const nodeChildren = node.children;
 	if (!widthList[iterations]){
@@ -72,11 +71,20 @@ function traverse(node, iterations){
 	}
 }
 function plot(node, currGen, currX, currY, isLeft){
-	const myNode = <HexNode text = {node.value} x = {currX + (!isLeft * xOffset) + "px"} y = {currY * getYOffsetFromXOffset(currX)+"px"}> </HexNode>
+	var multiplier = 0;
+	if (isLeft){
+		multiplier = -1;
+	}
+	if (!isLeft){
+		multiplier = 1;
+	}
+	console.log(currX)
+	const myNode = <HexNode text = {node.value} x = {currX + (multiplier * xOffset) + "px"} y = {currY}> </HexNode>
 	page.push(myNode)
 	let renderedNode = ReactDOM.render(myNode,document.getElementById('root'));
 	for (let i = 0; i < node.children.length; i++){
-			page.push(connectNodes(renderedNode, plot(node.children[i], currGen + 1, currX+xOffset, currY+getYOffsetFromXOffset(currX), (i%2==0))))
+			const nextNode = plot(node.children[i], currGen + 1, currX+xOffset, currY+getYOffsetFromXOffset(xOffset), (i%2===0))
+			page.push(connectNodes(renderedNode.getBoundingClientRect(), nextNode.getBoundingClientRect()))
 	}
 	return renderedNode;
 }
@@ -87,8 +95,11 @@ for (let i = 0; i < widthList.length; i++){
 		maxWidth = widthList[i];
 	}
 }
-
-plot(root, 0, false);
+var min = 2, max = 40;
+function percentToPixel(percent) {
+	    return ((percent / 100) * (max - min)) + min;
+}
+plot(root, 0,800,0, false);
 ReactDOM.render(
 	page,
 	document.getElementById('root')
