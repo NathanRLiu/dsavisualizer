@@ -72,7 +72,6 @@ body {
 	width:100%;
 	top:0;
 	left:0;
-	height:100vh;
 	color: rgb(var(--lineColor));
 	z-index:-1;
 	filter: drop-shadow(0px 0px 2px var(--hanColor))

@@ -25,7 +25,7 @@ var nodeList = [];
 
 var page = [];
 
-function connectNodes(x1,x2, y1, y2){
+function connectNodes(x1,x2, y1, y2, myHeight){
 	//let x1 = node1.left + node1.right;
 	//x1/=2;
 	//let x2 = node2.left + node2.right;
@@ -35,7 +35,7 @@ function connectNodes(x1,x2, y1, y2){
 	//let y2 = node2.top + node2.bottom;
 	//y2/=2;
 	return(
-		<svg class = "connection">
+		<svg class = "connection" style = {{height: myHeight * getYOffsetFromXOffset(xOffset)}}>
 			<line x1={x1} y2={y2} x2={x2} y1={y1} strokeWidth="5"  stroke="currentColor"/>
 		</svg>)
 }
@@ -57,7 +57,15 @@ function createNode(counter)
 	return thisNode
 }
 let widthList = [];
-let root = createNode(0);
+//let root = createNode(0);
+let root = new Node(0);
+let leftNode = new Node(1);
+root.addNode(leftNode);
+let rightNode = new Node(2);
+root.addNode(rightNode);
+leftNode.addNode(new Node(3));
+rightNode.addNode(new Node(4));
+
 function traverse(node, iterations){
 	const nodeChildren = node.children;
 	if (!widthList[iterations]){
@@ -68,6 +76,7 @@ function traverse(node, iterations){
 		traverse(nodeChildren[i], iterations + 1);
 	}
 }
+traverse(root, 0);
 function plot(node, currGen, currX, currY, multiplier){
 	currX = currX + (multiplier * xOffset)
 	const myNode = <HexNode text = {node.value} x = {currX} y = {currY}> </HexNode>
@@ -85,8 +94,8 @@ function plot(node, currGen, currX, currY, multiplier){
 				multiplier = 1;
 			}
 
-			const nextNode = plot(node.children[i], currGen + 1, currX + xOffset, currY+getYOffsetFromXOffset(xOffset), multiplier)
-			page.push(connectNodes(currX, currX + 52 + xOffset * multiplier, currY + 52, currY+getYOffsetFromXOffset(xOffset)))
+			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier)
+			page.push(connectNodes(currX+52, currX + 52 + xOffset * multiplier, currY + 52, currY+getYOffsetFromXOffset(xOffset), widthList.length))
 		}else{
 			const isLeft = Math.random() < 0.5
 			var multiplier = 0;
@@ -98,7 +107,7 @@ function plot(node, currGen, currX, currY, multiplier){
 			}
 			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier);
 
-			page.push(connectNodes(currX, currX + 52 + multiplier * xOffset, currY + 52, currY+getYOffsetFromXOffset(xOffset)));
+			page.push(connectNodes(currX+52, currX + 52 + multiplier * xOffset, currY + 52, currY+getYOffsetFromXOffset(xOffset), widthList.length));
 		}
 	}
 	return renderedNode;
