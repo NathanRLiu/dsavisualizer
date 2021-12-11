@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/NathanRLiu/dsavisualizer/static/css/main.dc109357.chunk.css",
+    "main.js": "/NathanRLiu/dsavisualizer/static/js/main.27071470.chunk.js",
+    "main.js.map": "/NathanRLiu/dsavisualizer/static/js/main.27071470.chunk.js.map",
+    "runtime-main.js": "/NathanRLiu/dsavisualizer/static/js/runtime-main.43bf9800.js",
+    "runtime-main.js.map": "/NathanRLiu/dsavisualizer/static/js/runtime-main.43bf9800.js.map",
+    "static/js/2.1e7f8d21.chunk.js": "/NathanRLiu/dsavisualizer/static/js/2.1e7f8d21.chunk.js",
+    "static/js/2.1e7f8d21.chunk.js.map": "/NathanRLiu/dsavisualizer/static/js/2.1e7f8d21.chunk.js.map",
+    "static/js/3.4ac7106c.chunk.js": "/NathanRLiu/dsavisualizer/static/js/3.4ac7106c.chunk.js",
+    "static/js/3.4ac7106c.chunk.js.map": "/NathanRLiu/dsavisualizer/static/js/3.4ac7106c.chunk.js.map",
+    "index.html": "/NathanRLiu/dsavisualizer/index.html",
+    "static/css/main.dc109357.chunk.css.map": "/NathanRLiu/dsavisualizer/static/css/main.dc109357.chunk.css.map",
+    "static/js/2.1e7f8d21.chunk.js.LICENSE.txt": "/NathanRLiu/dsavisualizer/static/js/2.1e7f8d21.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.43bf9800.js",
+    "static/js/2.1e7f8d21.chunk.js",
+    "static/css/main.dc109357.chunk.css",
+    "static/js/main.27071470.chunk.js"
+  ]
+}
