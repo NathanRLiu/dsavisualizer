@@ -35,7 +35,8 @@ function connectNodes(x1,x2, y1, y2, myHeight){
 	//let y2 = node2.top + node2.bottom;
 	//y2/=2;
 	return(
-		<svg class = "connection" style = {{height: myHeight * getYOffsetFromXOffset(xOffset)}}>
+		<svg class = "connection" style = {{width: myHeight * xOffset * myHeight/2 + widthList.length * xOffset * widthList.length/2,
+			height: myHeight * getYOffsetFromXOffset(xOffset)}}>
 			<line x1={x1} y2={y2} x2={x2} y1={y1} strokeWidth="5"  stroke="currentColor"/>
 		</svg>)
 }
@@ -43,7 +44,7 @@ function createNode(counter)
 {
 	let hasLeft = Math.random() < 0.5;
 	let hasRight = Math.random() < 0.5
-	if (counter >= 14){
+	if (counter >= 6){
 		hasLeft = false
 		hasRight = false
 	}
@@ -57,15 +58,15 @@ function createNode(counter)
 	return thisNode
 }
 let widthList = [];
-//let root = createNode(0);
-let root = new Node(0);
-let leftNode = new Node(1);
-root.addNode(leftNode);
-let rightNode = new Node(2);
-root.addNode(rightNode);
-leftNode.addNode(new Node(3));
-rightNode.addNode(new Node(4));
-leftNode.addNode(new Node(5));
+let root = createNode(0);
+//let root = new Node(0);
+//let leftNode = new Node(1);
+//root.addNode(leftNode);
+//let rightNode = new Node(2);
+//root.addNode(rightNode);
+//leftNode.addNode(new Node(3));
+//rightNode.addNode(new Node(4));
+//leftNode.addNode(new Node(5));
 
 function traverse(node, iterations){
 	const nodeChildren = node.children;
@@ -98,7 +99,7 @@ function plot(node, currGen, currX, currY, multiplier){
 			}
 
 		}else{
-			const isLeft = Math.random() < 0.5
+			const isLeft = Math.random() < 0.5 + multiplier * .2
 			if (isLeft){
 				nmultiplier = -1;
 			}
@@ -127,10 +128,8 @@ for (let i = 0; i < widthList.length; i++){
 	}
 }
 var min = 2, max = 40;
-function percentToPixel(percent) {
-	    return ((percent / 100) * (max - min)) + min;
-}
-plot(root, 0,1000, 30, 0);
+
+plot(root, 0, widthList.length * xOffset * widthList.length/2, 30, 0);
 ReactDOM.render(
 	page,
 	document.getElementById('root')

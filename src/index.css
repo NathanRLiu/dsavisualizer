@@ -4,6 +4,7 @@
 	--backgroundColor: #010101;
 	--innerHexColor: #949398FF;
 	--outerHexColor: rgb(var(--lineColor));
+	align-items:center;
 }
 body {
 	margin: 0;
