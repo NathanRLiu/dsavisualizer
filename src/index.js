@@ -65,6 +65,7 @@ let rightNode = new Node(2);
 root.addNode(rightNode);
 leftNode.addNode(new Node(3));
 rightNode.addNode(new Node(4));
+leftNode.addNode(new Node(5));
 
 function traverse(node, iterations){
 	const nodeChildren = node.children;
@@ -78,38 +79,43 @@ function traverse(node, iterations){
 }
 traverse(root, 0);
 function plot(node, currGen, currX, currY, multiplier){
-	currX = currX + (multiplier * xOffset)
+	let localXOffset = xOffset * (widthList.length - currGen)
+	currX = currX + (multiplier * localXOffset)
 	const myNode = <HexNode text = {node.value} x = {currX} y = {currY}> </HexNode>
 	page.push(myNode)
 	let renderedNode = ReactDOM.render(myNode,document.getElementById('root'));
 	let connXOffset = 52;
 	let connYOffset = 30;
 	for (let i = 0; i < node.children.length; i++){
-		if (node.children.length != 1){
-			const isLeft = (i%2===0)
-			var multiplier = 0;
+		var nmultiplier = 0;
+		if (node.children.length !== 1){
+			const isLeft = (i%2===0);
 			if (isLeft){
-				multiplier = -1;
+				nmultiplier = -1;
 			}
 			if (!isLeft){
-				multiplier = 1;
+				nmultiplier = 1;
 			}
 
-			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier)
-			page.push(connectNodes(currX+52, currX + 52 + xOffset * multiplier, currY + connYOffset, connYOffset+currY+getYOffsetFromXOffset(xOffset), widthList.length))
 		}else{
 			const isLeft = Math.random() < 0.5
-			var multiplier = 0;
 			if (isLeft){
-				multiplier = -1;
+				nmultiplier = -1;
 			}
 			if (!isLeft){
-				multiplier = 1;
+				nmultiplier = 1;
 			}
-			const nextNode = plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), multiplier);
-
-			page.push(connectNodes(currX+connXOffset, currX + connXOffset + multiplier * xOffset, currY + connYOffset, connYOffset+currY+getYOffsetFromXOffset(xOffset), widthList.length));
 		}
+		plot(node.children[i], currGen + 1, currX, currY+getYOffsetFromXOffset(xOffset), nmultiplier);
+
+		let nextXOffset = xOffset * (widthList.length - (currGen + 1));
+		let point1X = currX + connXOffset //the current node, the position of the left side plus a variable x offset that determines the distance remaining to the center
+		let point2X = connXOffset + currX + nextXOffset * nmultiplier //same as above but we then calculate the offset that the next line will have
+		let point1Y = currY + connYOffset // the position of the top of the current node plus a variable offset determining distance to the center.
+		let point2Y = currY + connYOffset + getYOffsetFromXOffset(xOffset); //add the displacement for the next layer
+
+		page.push(connectNodes(point1X, point2X, point1Y, point2Y, widthList.length))
+		
 	}
 	return renderedNode;
 }
@@ -124,7 +130,7 @@ var min = 2, max = 40;
 function percentToPixel(percent) {
 	    return ((percent / 100) * (max - min)) + min;
 }
-plot(root, 0,800,0, false);
+plot(root, 0,1000, 30, 0);
 ReactDOM.render(
 	page,
 	document.getElementById('root')
